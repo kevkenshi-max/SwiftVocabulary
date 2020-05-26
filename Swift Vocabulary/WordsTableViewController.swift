@@ -10,7 +10,7 @@ import UIKit
 
 class WordsTableViewController: UITableViewController {
 
-    var vocabWords: [VocabularyWord] = [VocabularyWord(word: "Variable", definition: "A variable provides us with named storage that our programs can manipulate"), (word: "Constant", definition: "refer to fixed values that a program may not alter during its execution"), (word: "Function", definition: "When a function is newly defined, it may take one or several values as input 'parameters' to the function and it will process the functions in the main body and pass back the values to the functions as output 'return types")]
+    var vocabWords: [VocabularyWord] = [VocabularyWord(word: "Variable", definition: "A named storage that our programs can manipulate."), VocabularyWord(word: "Constant", definition: "Refer to fixed values that a program may not alter during its execution"), VocabularyWord(word: "Function", definition: "self-contained chunks of code that perform a specific task.")]
     
     
     
@@ -18,25 +18,58 @@ class WordsTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
+        // Can you tell me what information I need to display? -Table View
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return vocabWords.count
     }
-
     
-    /*
+        // How should the cells look?
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+           let cell = tableView.dequeueReusableCell(withIdentifier: "Wordcell", for: indexPath)
+        
+           let words = vocabWords[indexPath.row]
+        
+           cell.textLabel?.text = words.word
+        
+           return cell
+       }
+    
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+        // The goal of this function is to give a word to the detail view control so that it could show the word in its background
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+        
+        // CHeck the segue identifier to know which view controller you are segueing to
+        
+        if segue.identifier == "ShowDefinitionSegue" {
+            
+            // Get the new view controller using segue.destination
+            let detailedVC = segue.destination as? DefinitionViewController
+            
+            // Get the information you want to pass to the new view controller
+            if let indexpath = tableView.indexPathForSelectedRow {
+            
+                let vocabWord = vocabWords[indexpath.row]
+            
+                // Pass the selected object to the new view controller
+                detailedVC?.vocabWord = vocabWord
+        }
+
+      }
+    
+   }
 
 }
+
+
